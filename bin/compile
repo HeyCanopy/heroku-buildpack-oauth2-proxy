@@ -18,3 +18,4 @@ rm oauth2-proxy.tar.gz
 
 # write out a start script
 cp "${BP_DIR}"/../scripts/start_*.sh "${BUILD_DIR}/bin"
+cp "${BP_DIR}"/../scripts/*.yaml "${BUILD_DIR}/bin/config"
