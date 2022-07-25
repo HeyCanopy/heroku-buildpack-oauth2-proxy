@@ -55,22 +55,32 @@ fi
 # 4) 'wait' on the command (wait is interrupted by an incoming TERM to the subshell, whereas running 3) in the foreground would wait for that 3) to finish before triggering the trap)
 # 5) add the PID of the subshell to the array that the EXIT trap further above uses to clean everything up
 
-echo "Starting oauth2-proxy..." >&2
-(
-    trap 'echo "oauth2-proxy" >&3;' EXIT
-    trap 'kill -TERM $! 2> /dev/null' TERM
-    /app/bin/start_oauth2_proxy.sh &
-    wait
-) & pids+=($!)
-
-echo "Starting backend..." >&2
-(
-    trap 'echo "backend" >&3;' EXIT
-    trap 'kill -TERM $! 2> /dev/null' TERM
-    export PORT=8080
-    "$@" &
-    wait
-) & pids+=($!)
+# Add a flag to only enable the OAUTH2_PROXY if explicitly specified
+if [[ "$OAUTH2_PROXY_ENABLE" = true ]] ; then 
+	echo "Starting oauth2-proxy..." >&2
+	(
+	    trap 'echo "oauth2-proxy" >&3;' EXIT
+	    trap 'kill -TERM $! 2> /dev/null' TERM
+	    /app/bin/start_oauth2_proxy.sh &
+	    wait
+	) & pids+=($!)
+	echo "Starting backend..." >&2
+	(
+	    trap 'echo "backend" >&3;' EXIT
+	    trap 'kill -TERM $! 2> /dev/null' TERM
+	    export PORT=8080
+	    "$@" &
+	    wait
+	) & pids+=($!)
+else
+	echo "Starting backend..." >&2
+	(
+	    trap 'echo "backend" >&3;' EXIT
+	    trap 'kill -TERM $! 2> /dev/null' TERM
+	    "$@" &
+	    wait
+	) & pids+=($!)
+fi
 
 read exitproc <&3
 echo "Process exited unexpectedly: $exitproc" >&2
