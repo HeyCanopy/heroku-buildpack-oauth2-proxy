@@ -62,40 +62,6 @@
           <button type="submit" class="button block is-primary" style="
     background-image: linear-gradient(to bottom right, #EC66ED, #D20E5A);">Authenticate</button>
       </form>
-
-      <hr>
-
-      <form method="POST" action="{{.ProxyPrefix}}/sign_in" class="block">
-        <input type="hidden" name="rd" value="{{.Redirect}}">
-
-        <div class="field">
-          <label class="label" for="username">Username</label>
-          <div class="control">
-            <input class="input" type="text" placeholder="e.g. userx@example.com"  name="username" id="username">
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label" for="password">Password</label>
-          <div class="control">
-            <input class="input" type="password" placeholder="********" name="password" id="password">
-          </div>
-        </div>
-        <button class="button is-primary">Sign in</button>
-      </form>
-      {{ end }}
-
-      {{ if eq .StatusCode 400 401 }}
-      <div class="alert">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-        {{ if eq .StatusCode 400 }}
-        {{.StatusCode}}: Username cannot be empty
-        {{ else }}
-        {{.StatusCode}}: Invalid Username or Password
-        {{ end }}
-      </div> 
-      {{ end }}
-
     </div>
   </section>
 
