@@ -35,4 +35,4 @@ if [ -n "${OAUTH2_GITHUB_ORG}" ]; then
 fi
 
 echo "starting oauth2-proxy..."
-exec ./oauth2-proxy 
+exec ./oauth2-proxy --custom-templates-dir ../assets/
